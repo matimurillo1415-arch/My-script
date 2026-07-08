@@ -1,0 +1,13 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local remote = game.ReplicatedStorage:WaitForChild("muscleEvent")
+
+_G.AutoPunch = true
+
+task.spawn(function()
+	while _G.AutoPunch do
+		remote:FireServer()
+		task.wait(0.1)
+	end
+end)
