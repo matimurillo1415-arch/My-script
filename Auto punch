@@ -1,13 +1,223 @@
 local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+
 local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
-local remote = game.ReplicatedStorage:WaitForChild("muscleEvent")
+local gui = Instance.new("ScreenGui")
+gui.Name = "ClanTakko"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = playerGui
 
-_G.AutoPunch = true
+--==================================================
+-- KEY
+--==================================================
 
-task.spawn(function()
-	while _G.AutoPunch do
-		remote:FireServer()
-		task.wait(0.1)
+local keyPanel = Instance.new("Frame")
+keyPanel.Size = UDim2.new(0, 350, 0, 220)
+keyPanel.Position = UDim2.new(0.5, -175, 0.5, -110)
+keyPanel.BackgroundColor3 = Color3.fromRGB(30, 20, 40)
+keyPanel.Parent = gui
+
+Instance.new("UICorner", keyPanel).CornerRadius = UDim.new(0, 15)
+
+local keyTitle = Instance.new("TextLabel")
+keyTitle.Size = UDim2.new(1, 0, 0, 60)
+keyTitle.BackgroundTransparency = 1
+keyTitle.Text = "CLAN TAKKO"
+keyTitle.TextColor3 = Color3.fromRGB(255, 80, 220)
+keyTitle.TextSize = 30
+keyTitle.Font = Enum.Font.GothamBold
+keyTitle.Parent = keyPanel
+
+local keyBox = Instance.new("TextBox")
+keyBox.Size = UDim2.new(1, -40, 0, 50)
+keyBox.Position = UDim2.new(0, 20, 0, 75)
+keyBox.BackgroundColor3 = Color3.fromRGB(50, 40, 60)
+keyBox.Text = ""
+keyBox.PlaceholderText = "Escribe la Key"
+keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyBox.TextSize = 18
+keyBox.Parent = keyPanel
+
+Instance.new("UICorner", keyBox).CornerRadius = UDim.new(0, 10)
+
+local verify = Instance.new("TextButton")
+verify.Size = UDim2.new(1, -40, 0, 50)
+verify.Position = UDim2.new(0, 20, 0, 140)
+verify.BackgroundColor3 = Color3.fromRGB(130, 40, 180)
+verify.Text = "VERIFICAR"
+verify.TextColor3 = Color3.fromRGB(255, 255, 255)
+verify.TextSize = 18
+verify.Font = Enum.Font.GothamBold
+verify.Parent = keyPanel
+
+Instance.new("UICorner", verify).CornerRadius = UDim.new(0, 10)
+
+--==================================================
+-- PANEL PRINCIPAL
+--==================================================
+
+local panel = Instance.new("Frame")
+panel.Size = UDim2.new(0, 420, 0, 330)
+panel.Position = UDim2.new(0.5, -210, 0.5, -165)
+panel.BackgroundColor3 = Color3.fromRGB(25, 15, 35)
+panel.BorderSizePixel = 0
+panel.Visible = false
+panel.Parent = gui
+
+Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 18)
+
+local panelStroke = Instance.new("UIStroke")
+panelStroke.Thickness = 3
+panelStroke.Color = Color3.fromRGB(190, 0, 255)
+panelStroke.Parent = panel
+
+-- TÍTULO
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 70)
+title.BackgroundTransparency = 1
+title.Text = "CLAN TAKKO"
+title.TextColor3 = Color3.fromRGB(255, 80, 220)
+title.TextSize = 34
+title.Font = Enum.Font.GothamBlack
+title.Parent = panel
+
+local subtitle = Instance.new("TextLabel")
+subtitle.Size = UDim2.new(1, 0, 0, 30)
+subtitle.Position = UDim2.new(0, 0, 0, 55)
+subtitle.BackgroundTransparency = 1
+subtitle.Text = "AUTO FARM PANEL"
+subtitle.TextColor3 = Color3.fromRGB(80, 200, 255)
+subtitle.TextSize = 16
+subtitle.Font = Enum.Font.GothamBold
+subtitle.Parent = panel
+
+-- AUTO WEIGHT
+
+local weightButton = Instance.new("TextButton")
+weightButton.Size = UDim2.new(1, -40, 0, 55)
+weightButton.Position = UDim2.new(0, 20, 0, 100)
+weightButton.BackgroundColor3 = Color3.fromRGB(80, 30, 150)
+weightButton.Text = "Auto Weight: OFF"
+weightButton.TextColor3 = Color3.fromRGB(255, 255, 100)
+weightButton.TextSize = 19
+weightButton.Font = Enum.Font.GothamBold
+weightButton.Parent = panel
+
+Instance.new("UICorner", weightButton).CornerRadius = UDim.new(0, 10)
+
+-- AUTO REBIRTHS
+
+local rebirthButton = Instance.new("TextButton")
+rebirthButton.Size = UDim2.new(1, -40, 0, 55)
+rebirthButton.Position = UDim2.new(0, 20, 0, 170)
+rebirthButton.BackgroundColor3 = Color3.fromRGB(180, 40, 100)
+rebirthButton.Text = "Auto Rebirths: OFF"
+rebirthButton.TextColor3 = Color3.fromRGB(100, 255, 255)
+rebirthButton.TextSize = 19
+rebirthButton.Font = Enum.Font.GothamBold
+rebirthButton.Parent = panel
+
+Instance.new("UICorner", rebirthButton).CornerRadius = UDim.new(0, 10)
+
+-- CERRAR
+
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 40, 0, 40)
+closeButton.Position = UDim2.new(1, -50, 0, 10)
+closeButton.BackgroundColor3 = Color3.fromRGB(150, 30, 80)
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.TextSize = 20
+closeButton.Font = Enum.Font.GothamBold
+closeButton.Parent = panel
+
+Instance.new("UICorner", closeButton).CornerRadius = UDim.new(0, 10)
+
+-- BOTÓN FLOTANTE
+
+local floating = Instance.new("TextButton")
+floating.Size = UDim2.new(0, 150, 0, 50)
+floating.Position = UDim2.new(0, 20, 0.5, 0)
+floating.BackgroundColor3 = Color3.fromRGB(80, 30, 150)
+floating.Text = "CLAN TAKKO"
+floating.TextColor3 = Color3.fromRGB(255, 100, 230)
+floating.TextSize = 17
+floating.Font = Enum.Font.GothamBlack
+floating.Visible = false
+floating.Parent = gui
+
+Instance.new("UICorner", floating).CornerRadius = UDim.new(0, 12)
+
+--==================================================
+-- KEY CORRECTA
+--==================================================
+
+verify.MouseButton1Click:Connect(function()
+
+	if keyBox.Text == "TAKKO2026" then
+
+		keyTitle.Text = "✓ KEY CORRECTA"
+		keyTitle.TextColor3 = Color3.fromRGB(80, 255, 120)
+
+		task.wait(0.5)
+
+		keyPanel.Visible = false
+		panel.Visible = true
+
+	else
+
+		keyTitle.Text = "✗ KEY INCORRECTA"
+		keyTitle.TextColor3 = Color3.fromRGB(255, 70, 70)
+
+		task.wait(0.5)
+
+		keyTitle.Text = "CLAN TAKKO"
+		keyTitle.TextColor3 = Color3.fromRGB(255, 80, 220)
 	end
+end)
+
+--==================================================
+-- OCULTAR / MOSTRAR
+--==================================================
+
+closeButton.MouseButton1Click:Connect(function()
+	panel.Visible = false
+	floating.Visible = true
+end)
+
+floating.MouseButton1Click:Connect(function()
+	panel.Visible = true
+	floating.Visible = false
+end)
+
+--==================================================
+-- BOTONES
+--==================================================
+
+weightButton.MouseButton1Click:Connect(function()
+
+	if weightButton.Text == "Auto Weight: OFF" then
+		weightButton.Text = "Auto Weight: ON"
+		weightButton.TextColor3 = Color3.fromRGB(80, 255, 120)
+	else
+		weightButton.Text = "Auto Weight: OFF"
+		weightButton.TextColor3 = Color3.fromRGB(255, 255, 100)
+	end
+
+end)
+
+rebirthButton.MouseButton1Click:Connect(function()
+
+	if rebirthButton.Text == "Auto Rebirths: OFF" then
+		rebirthButton.Text = "Auto Rebirths: ON"
+		rebirthButton.TextColor3 = Color3.fromRGB(80, 255, 120)
+	else
+		rebirthButton.Text = "Auto Rebirths: OFF"
+		rebirthButton.TextColor3 = Color3.fromRGB(100, 255, 255)
+	end
+
 end)
